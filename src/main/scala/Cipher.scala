@@ -24,7 +24,7 @@ case class Cipher(providedKey: Option[String]) {
   }
 
   private def isKeyValid: Unit = {
-    require(key.forall(c => c.isLower) && !key.isEmpty, "Cipher(providedKey)")
+    require(key.forall(c => c.isLower) && !key.isEmpty, "Provided key is not valid")
   }
 
   private def getRandomKey: String = {
