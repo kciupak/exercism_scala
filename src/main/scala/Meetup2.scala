@@ -3,7 +3,7 @@ import scala.collection.immutable.TreeMap
 
 import Schedule.Schedule
 
-case class Meetup(month: Int, year: Int) {
+case class Meetup2(month: Int, year: Int) {
 
   def day(dayOfWeek: Int, schedule: Schedule): LocalDate = {
     val dayMap: Map[Int,Int] = createDayMap(dayOfWeek)
@@ -47,12 +47,12 @@ case class Meetup(month: Int, year: Int) {
   }
 }
 
-object Schedule extends Enumeration {
+object Schedule2 extends Enumeration {
   type Schedule = Value
   val Teenth, First, Second, Third, Fourth, Last = Value
 }
 
-object Meetup {
+object Meetup2 {
   val Mon = DayOfWeek.MONDAY.getValue
   val Tue = DayOfWeek.TUESDAY.getValue
   val Wed = DayOfWeek.WEDNESDAY.getValue

@@ -3,18 +3,22 @@ import scala.collection.immutable.TreeMap
 
 import Schedule.Schedule
 
-case class Meetup(month: Int, year: Int) {
+case class Meetup1(month: Int, year: Int) {
 
   def day(dayOfWeek: Int, schedule: Schedule): LocalDate = {
-    val dayMap: Map[Int,Int] = createDayMap(dayOfWeek)
+    val dayMap: Map[Int, Int] = createDayMap(dayOfWeek)
 
     val monthDay: Int = countDay(dayMap, countSchedule(schedule))
     LocalDate.of(year, month, monthDay)
   }
 
-  private def createDayMap(dayOfWeek: Int): Map[Int,Int] = {
-    val monthDaysMap: Map[Int,Int] = {
-      TreeMap((1 to daysOfMonthCount(month)).map(key => key -> ((key - 2 + firstMonthDay)%7 + 1)): _*)
+  private def createDayMap(dayOfWeek: Int): Map[Int, Int] = {
+    val monthDaysMap: Map[Int, Int] = {
+      TreeMap(
+        (1 to daysOfMonthCount(month)).map(key =>
+          key -> ((key - 2 + firstMonthDay) % 7 + 1)
+        ): _*
+      )
     }
     monthDaysMap.filter { case (_, value) => value == dayOfWeek }
   }
@@ -22,58 +26,66 @@ case class Meetup(month: Int, year: Int) {
   private def countSchedule(schedule: Schedule): Int = {
     schedule match {
       case Schedule.Teenth => 10
-      case Schedule.First => 1
+      case Schedule.First  => 1
       case Schedule.Second => 2
-      case Schedule.Third => 3
+      case Schedule.Third  => 3
       case Schedule.Fourth => 4
-      case Schedule.Last => -1
+      case Schedule.Last   => -1
     }
   }
 
-  private def countDay(dayMap: Map[Int,Int], n: Int): Int = {
+  private def countDay(dayMap: Map[Int, Int], n: Int): Int = {
     n match {
-      case 10 => dayMap.keys.toList.find(List(13,14,15,16,17,18,19).contains(_)).getOrElse(-1)
+      case 10 =>
+        dayMap.keys.toList
+          .find(List(13, 14, 15, 16, 17, 18, 19).contains(_))
+          .getOrElse(-1)
       case -1 => dayMap.keys.toList.last
-      case _ => dayMap.keys.toList(n - 1)
+      case _  => dayMap.keys.toList(n - 1)
     }
   }
 
   private def firstMonthDay: Int = {
-   val ages: Int = year/100
-   val yearsInAge: Int = year % 100
-   val leap: Int = if (leapYear(year)) 1 else 0
+    val ages: Int = year / 100
+    val yearsInAge: Int = year % 100
+    val leap: Int = if (leapYear(year)) 1 else 0
 
     var y: Int = yearsInAge
-    var m: Int = month -2
+    var m: Int = month - 2
     if (m < 1) {
       m += 12
       y -= 1
     }
-   val day: Int = ((((26 * m -2) / 10) + 1 + y + y / 4 + ages / 4 + 5 * ages ) % 7)
-   if (day ==0) 7 else day
+    val day: Int =
+      ((((26 * m - 2) / 10) + 1 + y + y / 4 + ages / 4 + 5 * ages) % 7)
+    if (day == 0) 7 else day
   }
 
   private def leapYear(year: Int): Boolean = {
-    hasNoReminder(year, 400) || hasNoReminder(year, 4) && !hasNoReminder(year, 100)
+    hasNoReminder(year, 400) || hasNoReminder(year, 4) && !hasNoReminder(
+      year,
+      100
+    )
   }
 
-  private def hasNoReminder(brave: Int, divisor: Int): Boolean = brave % divisor == 0
+  private def hasNoReminder(brave: Int, divisor: Int): Boolean =
+    brave % divisor == 0
 
   private def daysOfMonthCount(monthNo: Int): Int = {
     monthNo match {
       case 1 | 3 | 5 | 7 | 8 | 10 | 12 => 31
-      case 4 | 6 | 9 | 11 => 30
-      case 2 => if (year%4 == 0) 29 else 28
+      case 4 | 6 | 9 | 11              => 30
+      case 2                           => if (year % 4 == 0) 29 else 28
     }
   }
 }
 
-object Schedule extends Enumeration {
+object Schedule1 extends Enumeration {
   type Schedule = Value
   val Teenth, First, Second, Third, Fourth, Last = Value
 }
 
-object Meetup {
+object Meetup1 {
   val Mon = DayOfWeek.MONDAY.getValue
   val Tue = DayOfWeek.TUESDAY.getValue
   val Wed = DayOfWeek.WEDNESDAY.getValue
@@ -82,7 +94,6 @@ object Meetup {
   val Sat = DayOfWeek.SATURDAY.getValue
   val Sun = DayOfWeek.SUNDAY.getValue
 }
-
 
 // Instructions
 // Calculate the date of meetups.
